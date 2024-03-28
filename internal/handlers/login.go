@@ -62,7 +62,7 @@ func LoginHandler(c *gin.Context) {
 	password := fmt.Sprintf("%x", sha256.Sum256([]byte(input.Password)))
 
 	if err := db.Where("username = ? and password = ?", input.Username, password).First(&user).Error; err != nil {
-		c.JSON(http.StatusNotFound, map[string]string{})
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}
 

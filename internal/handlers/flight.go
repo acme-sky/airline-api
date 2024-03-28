@@ -28,12 +28,12 @@ func FlightHandlerPost(c *gin.Context) {
 	db, _ := db.GetDb()
 	var input models.FlightInput
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
 	if err := models.ValidateFlight(db, input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -50,7 +50,7 @@ func FlightHandlerGetId(c *gin.Context) {
 	db, _ := db.GetDb()
 	var flight models.Flight
 	if err := db.Where("id = ?", c.Param("id")).Preload("DepartaureAirport").Preload("ArrivalAirport").First(&flight).Error; err != nil {
-		c.JSON(http.StatusNotFound, map[string]string{})
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -64,18 +64,18 @@ func FlightHandlerPut(c *gin.Context) {
 	db, _ := db.GetDb()
 	var flight models.Flight
 	if err := db.Where("id = ?", c.Param("id")).First(&flight).Error; err != nil {
-		c.JSON(http.StatusNotFound, map[string]string{})
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}
 
 	var input models.FlightInput
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
 	if err := models.ValidateFlight(db, input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 

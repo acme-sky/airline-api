@@ -29,7 +29,7 @@ func AirportHandlerPost(c *gin.Context) {
 	db, _ := db.GetDb()
 	var input models.AirportInput
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -45,7 +45,7 @@ func AirportHandlerGetId(c *gin.Context) {
 	db, _ := db.GetDb()
 	var airport models.Airport
 	if err := db.Where("id = ?", c.Param("id")).First(&airport).Error; err != nil {
-		c.JSON(http.StatusNotFound, map[string]string{})
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -59,7 +59,7 @@ func AirportHandlerPut(c *gin.Context) {
 	db, _ := db.GetDb()
 	var airport models.Airport
 	if err := db.Where("id = ?", c.Param("id")).First(&airport).Error; err != nil {
-		c.JSON(http.StatusNotFound, map[string]string{})
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}
 

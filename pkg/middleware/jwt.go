@@ -23,11 +23,9 @@ func Auth(c *gin.Context) {
 	config, err := config.GetConfig()
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": err,
-		})
-
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		c.Abort()
+
 		return
 	}
 
@@ -37,9 +35,7 @@ func Auth(c *gin.Context) {
 
 	// If header does not start with "Bearer " better to stop here
 	if !strings.HasPrefix(bearer, "Bearer ") {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"message": "unauthorized3",
-		})
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 
 		c.Abort()
 		return
@@ -52,23 +48,17 @@ func Auth(c *gin.Context) {
 
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"message": "unauthorized1",
-			})
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 		} else {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "bad request",
-			})
+			c.JSON(http.StatusBadRequest, gin.H{"message": "bad request"})
 		}
 
 		c.Abort()
 		return
 	} else if !token.Valid {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"message": "unauthorized2",
-		})
-
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "unauthorized"})
 		c.Abort()
+
 		return
 	}
 }
