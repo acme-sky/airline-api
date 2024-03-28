@@ -11,7 +11,7 @@ import (
 // Handle GET request for `Airport` model.
 // It returns a list of airports.
 func AirportHandlerGet(c *gin.Context) {
-	db := db.GetDb()
+	db, _ := db.GetDb()
 
 	var airports []models.Airport
 	db.Find(&airports)
@@ -26,7 +26,7 @@ func AirportHandlerGet(c *gin.Context) {
 // Validate JSON input by the request and crate a new airport. Finally returns
 // the new created data.
 func AirportHandlerPost(c *gin.Context) {
-	db := db.GetDb()
+	db, _ := db.GetDb()
 	var input models.AirportInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -42,7 +42,7 @@ func AirportHandlerPost(c *gin.Context) {
 // Handle GET request for a selected id.
 // Returns the aiport or a 404 status
 func AirportHandlerGetId(c *gin.Context) {
-	db := db.GetDb()
+	db, _ := db.GetDb()
 	var airport models.Airport
 	if err := db.Where("id = ?", c.Param("id")).First(&airport).Error; err != nil {
 		c.JSON(http.StatusNotFound, map[string]string{})
@@ -56,7 +56,7 @@ func AirportHandlerGetId(c *gin.Context) {
 // First checks if the selected airport exists or not. Then, validates JSON input by the
 // request and edit a selected airport. Finally returns the new created data.
 func AirportHandlerPut(c *gin.Context) {
-	db := db.GetDb()
+	db, _ := db.GetDb()
 	var airport models.Airport
 	if err := db.Where("id = ?", c.Param("id")).First(&airport).Error; err != nil {
 		c.JSON(http.StatusNotFound, map[string]string{})

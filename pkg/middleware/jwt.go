@@ -20,7 +20,18 @@ type Claims struct {
 // Check the authorization from the header bearer token. If the authorization is
 // good does nothing, else it aborts the Gin context.
 func Auth(c *gin.Context) {
-	key := []byte(config.GetConfig().String("jwt.token"))
+	config, err := config.GetConfig()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": err,
+		})
+
+		c.Abort()
+		return
+	}
+
+	key := []byte(config.String("jwt.token"))
 	bearer := c.Request.Header.Get("Authorization")
 	claims := &Claims{}
 

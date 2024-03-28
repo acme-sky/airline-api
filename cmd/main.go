@@ -19,15 +19,21 @@ func main() {
 	// TODO: set mode by env var
 	gin.SetMode(gin.DebugMode)
 
+	var err error
+
 	// Read environment variables and stops execution if any errors occur
-	if err := config.LoadConfig(); err != nil {
+	err = config.LoadConfig()
+	if err != nil {
 		log.Printf("failed to load config. err %v", err)
 
 		return
 	}
 
-	_, err := db.InitDb(config.GetConfig().String("database.dsn"))
-	if err != nil {
+	// Ignore error because if it failed on loading, it should raised an error
+	// above.
+	config, _ := config.GetConfig()
+
+	if _, err := db.InitDb(config.String("database.dsn")); err != nil {
 		log.Printf("failed to connect database. err %v", err)
 
 		return

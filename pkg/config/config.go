@@ -1,11 +1,14 @@
 package config
 
 import (
+	"errors"
+	"strings"
+
 	"github.com/knadh/koanf/providers/env"
 	"github.com/knadh/koanf/v2"
-	"strings"
 )
 
+// Global variable but private
 var config *koanf.Koanf = nil
 
 // Load config froom environment. Something different than that could be create
@@ -27,6 +30,10 @@ func LoadConfig() error {
 	return nil
 }
 
-func GetConfig() *koanf.Koanf {
-	return config
+// Return the instance or error if the config is not laoded yet
+func GetConfig() (*koanf.Koanf, error) {
+	if config == nil {
+		return nil, errors.New("You must call `InitDb()` first.")
+	}
+	return config, nil
 }

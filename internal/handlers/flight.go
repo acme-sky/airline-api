@@ -11,7 +11,7 @@ import (
 // Handle GET request for `Flight` model.
 // It returns a list of flights.
 func FlightHandlerGet(c *gin.Context) {
-	db := db.GetDb()
+	db, _ := db.GetDb()
 	var flights []models.Flight
 	db.Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flights)
 
@@ -25,7 +25,7 @@ func FlightHandlerGet(c *gin.Context) {
 // Validate JSON input by the request and crate a new flight. Finally returns
 // the new created data (after preloading the foreign key objects).
 func FlightHandlerPost(c *gin.Context) {
-	db := db.GetDb()
+	db, _ := db.GetDb()
 	var input models.FlightInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -47,7 +47,7 @@ func FlightHandlerPost(c *gin.Context) {
 // Handle GET request for a selected id.
 // Returns the flight or a 404 status
 func FlightHandlerGetId(c *gin.Context) {
-	db := db.GetDb()
+	db, _ := db.GetDb()
 	var flight models.Flight
 	if err := db.Where("id = ?", c.Param("id")).Preload("DepartaureAirport").Preload("ArrivalAirport").First(&flight).Error; err != nil {
 		c.JSON(http.StatusNotFound, map[string]string{})
@@ -61,7 +61,7 @@ func FlightHandlerGetId(c *gin.Context) {
 // First checks if the selected flight exists or not. Then, validates JSON input by the
 // request and edit a selected flight. Finally returns the new created data.
 func FlightHandlerPut(c *gin.Context) {
-	db := db.GetDb()
+	db, _ := db.GetDb()
 	var flight models.Flight
 	if err := db.Where("id = ?", c.Param("id")).First(&flight).Error; err != nil {
 		c.JSON(http.StatusNotFound, map[string]string{})
