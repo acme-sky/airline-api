@@ -10,13 +10,13 @@ import (
 
 // Handle GET request for `Airport` model.
 // It returns a list of airports.
-func AirportHandlerGet(ctx *gin.Context) {
+func AirportHandlerGet(c *gin.Context) {
 	db := db.GetDb()
 
 	var airports []models.Airport
 	db.Find(&airports)
 
-	ctx.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"count": len(airports),
 		"data":  &airports,
 	})
@@ -25,51 +25,51 @@ func AirportHandlerGet(ctx *gin.Context) {
 // Handle POST request for `Airport` model.
 // Validate JSON input by the request and crate a new airport. Finally returns
 // the new created data.
-func AirportHandlerPost(ctx *gin.Context) {
+func AirportHandlerPost(c *gin.Context) {
 	db := db.GetDb()
 	var input models.AirportInput
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	airport := models.NewAirport(input)
 	db.Create(&airport)
 
-	ctx.JSON(http.StatusCreated, airport)
+	c.JSON(http.StatusCreated, airport)
 }
 
 // Handle GET request for a selected id.
 // Returns the aiport or a 404 status
-func AirportHandlerGetId(ctx *gin.Context) {
+func AirportHandlerGetId(c *gin.Context) {
 	db := db.GetDb()
 	var airport models.Airport
-	if err := db.Where("id = ?", ctx.Param("id")).First(&airport).Error; err != nil {
-		ctx.JSON(http.StatusNotFound, map[string]string{})
+	if err := db.Where("id = ?", c.Param("id")).First(&airport).Error; err != nil {
+		c.JSON(http.StatusNotFound, map[string]string{})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, airport)
+	c.JSON(http.StatusOK, airport)
 }
 
 // Handle PUT request for `Airport` model.
 // First checks if the selected airport exists or not. Then, validates JSON input by the
 // request and edit a selected airport. Finally returns the new created data.
-func AirportHandlerPut(ctx *gin.Context) {
+func AirportHandlerPut(c *gin.Context) {
 	db := db.GetDb()
 	var airport models.Airport
-	if err := db.Where("id = ?", ctx.Param("id")).First(&airport).Error; err != nil {
-		ctx.JSON(http.StatusNotFound, map[string]string{})
+	if err := db.Where("id = ?", c.Param("id")).First(&airport).Error; err != nil {
+		c.JSON(http.StatusNotFound, map[string]string{})
 		return
 	}
 
 	var input models.AirportInput
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	db.Model(&airport).Updates(input)
 
-	ctx.JSON(http.StatusOK, airport)
+	c.JSON(http.StatusOK, airport)
 }
