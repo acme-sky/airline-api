@@ -2,8 +2,8 @@ package main
 
 import (
 	"log"
-	"net/http"
 
+	"github.com/acme-sky/airline-api/internal/controllers"
 	"github.com/acme-sky/airline-api/pkg/config"
 	"github.com/acme-sky/airline-api/pkg/db"
 	"github.com/gin-gonic/gin"
@@ -27,11 +27,14 @@ func main() {
 		return
 	}
 
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, map[string]string{
-			"hello": "world",
-		})
-	})
+	v1 := router.Group("/v1")
+	{
+		airports := v1.Group("/airports")
+		{
+			airports.GET("/", controllers.AirportGet)
+			airports.POST("/", controllers.AirportPost)
+		}
+	}
 
 	router.Run()
 }
