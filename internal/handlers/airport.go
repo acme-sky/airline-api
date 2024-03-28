@@ -27,10 +27,10 @@ func AirportHandlerPost(ctx *gin.Context) {
 		return
 	}
 
-	aiport := models.NewAirport(input)
-	db.Create(&aiport)
+	airport := models.NewAirport(input)
+	db.Create(&airport)
 
-	ctx.JSON(http.StatusCreated, aiport)
+	ctx.JSON(http.StatusCreated, airport)
 }
 
 func AirportHandlerGetId(ctx *gin.Context) {
