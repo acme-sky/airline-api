@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Handle GET request for `Flight` model.
+// It returns a list of flights.
 func FlightHandlerGet(ctx *gin.Context) {
 	db := db.GetDb()
 	var flights []models.Flight
@@ -19,6 +21,9 @@ func FlightHandlerGet(ctx *gin.Context) {
 	})
 }
 
+// Handle POST request for `Flight` model.
+// Validate JSON input by the request and crate a new flight. Finally returns
+// the new created data (after preloading the foreign key objects).
 func FlightHandlerPost(ctx *gin.Context) {
 	db := db.GetDb()
 	var input models.FlightInput
@@ -39,10 +44,12 @@ func FlightHandlerPost(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, flight)
 }
 
+// Handle GET request for a selected id.
+// Returns the flight or a 404 status
 func FlightHandlerGetId(ctx *gin.Context) {
 	db := db.GetDb()
 	var flight models.Flight
-	if err := db.Where("id = ?", ctx.Param("id")).First(&flight).Error; err != nil {
+	if err := db.Where("id = ?", ctx.Param("id")).Preload("DepartaureAirport").Preload("ArrivalAirport").First(&flight).Error; err != nil {
 		ctx.JSON(http.StatusNotFound, map[string]string{})
 		return
 	}
@@ -50,6 +57,9 @@ func FlightHandlerGetId(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, flight)
 }
 
+// Handle PUT request for `Flight` model.
+// First checks if the selected flight exists or not. Then, validates JSON input by the
+// request and edit a selected flight. Finally returns the new created data.
 func FlightHandlerPut(ctx *gin.Context) {
 	db := db.GetDb()
 	var flight models.Flight

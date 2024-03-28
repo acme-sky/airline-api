@@ -1,5 +1,6 @@
 package models
 
+// Airport model
 type Airport struct {
 	Id        uint    `gorm:"column:id" json:"id"`
 	Name      string  `gorm:"column:name" json:"name"`
@@ -8,6 +9,7 @@ type Airport struct {
 	Longitude float32 `gorm:"column:longitude" json:"longitude"`
 }
 
+// Struct used to get new data for an airport
 type AirportInput struct {
 	Name      string  `json:"name" binding:"required"`
 	Location  string  `json:"location" binding:"required"`
@@ -15,6 +17,7 @@ type AirportInput struct {
 	Longitude float32 `json:"longitude" binding:"required"`
 }
 
+// Returns a new Airport with the data from `in`
 func NewAirport(in AirportInput) Airport {
 	return Airport{
 		Name:      in.Name,

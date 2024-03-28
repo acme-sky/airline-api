@@ -9,10 +9,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Create a new instance of Gin server
 func main() {
 	router := gin.Default()
+
+	// Mode is setted as Debug by default. This line below keep this thing more
+	// expressive but it should be setted up by an environment variable.
+	// TODO: set mode by env var
 	gin.SetMode(gin.DebugMode)
 
+	// Read environment variables and stops execution if any errors occur
 	conf, err := config.LoadConfig()
 	if err != nil {
 		log.Printf("failed to load config. err %v", err)
@@ -27,6 +33,7 @@ func main() {
 		return
 	}
 
+	// v1 is just like a namespace for every routing here below
 	v1 := router.Group("/v1")
 	{
 		airports := v1.Group("/airports")

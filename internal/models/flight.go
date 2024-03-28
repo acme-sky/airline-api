@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Flight model
 type Flight struct {
 	Id                  uint      `gorm:"column:id" json:"id"`
 	CreatedAt           time.Time `gorm:"column:created_at" json:"crated_at"`
@@ -19,6 +20,7 @@ type Flight struct {
 	Cost                float32   `gorm:"column:cost" json:"cost"`
 }
 
+// Struct used to get new data for a flight
 type FlightInput struct {
 	DepartaureTime      time.Time `json:"departaure_time" binding:"required"`
 	ArrivalTime         time.Time `json:"arrival_time" binding:"required"`
@@ -27,6 +29,7 @@ type FlightInput struct {
 	Cost                float32   `json:"cost" binding:"required"`
 }
 
+// It validates data from `in` and returns a possible error or not
 func ValidateFlight(db *gorm.DB, in FlightInput) error {
 	var departaure_airport Airport
 	if err := db.Where("id = ?", in.DepartaureAirportId).First(&departaure_airport).Error; err != nil {
@@ -49,6 +52,8 @@ func ValidateFlight(db *gorm.DB, in FlightInput) error {
 	return nil
 }
 
+// Returns a new Flight with the data from `in`. It should be called after
+// `ValidateFlight(..., in)` method
 func NewFlight(in FlightInput) Flight {
 	return Flight{
 		CreatedAt:           time.Now(),
