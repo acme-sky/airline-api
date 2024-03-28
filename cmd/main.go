@@ -36,6 +36,14 @@ func main() {
 			airports.GET("/:id/", handlers.AirportHandlerGetId)
 			airports.PUT("/:id/", handlers.AirportHandlerPut)
 		}
+
+		flights := v1.Group("/flights")
+		{
+			flights.GET("/", handlers.FlightHandlerGet)
+			flights.POST("/", handlers.FlightHandlerPost)
+			flights.GET("/:id/", handlers.FlightHandlerGetId)
+			flights.PUT("/:id/", handlers.FlightHandlerPut)
+		}
 	}
 
 	router.Run()
