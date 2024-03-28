@@ -3,6 +3,8 @@ package models
 import (
 	"errors"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Flight struct {
@@ -25,7 +27,17 @@ type FlightInput struct {
 	Cost                float32   `json:"cost" binding:"required"`
 }
 
-func ValidateFlight(in FlightInput) error {
+func ValidateFlight(db *gorm.DB, in FlightInput) error {
+	var departaure_airport Airport
+	if err := db.Where("id = ?", in.DepartaureAirportId).First(&departaure_airport).Error; err != nil {
+		return errors.New("`departaure_airport_id` does not exist.")
+	}
+
+	var arrival_airport Airport
+	if err := db.Where("id = ?", in.ArrivalAirportId).First(&arrival_airport).Error; err != nil {
+		return errors.New("`arrival_airport_id` does not exist.")
+	}
+
 	if in.DepartaureAirportId == in.ArrivalAirportId {
 		return errors.New("`departaure_airport_id` can't be equals to `arrival_airport_id`")
 	}
@@ -37,17 +49,13 @@ func ValidateFlight(in FlightInput) error {
 	return nil
 }
 
-func NewFlight(in FlightInput) (*Flight, error) {
-	if err := ValidateFlight(in); err != nil {
-		return nil, err
-	}
-
-	return &Flight{
+func NewFlight(in FlightInput) Flight {
+	return Flight{
 		CreatedAt:           time.Now(),
 		DepartaureTime:      in.DepartaureTime,
 		DepartaureAirportId: in.DepartaureAirportId,
 		ArrivalTime:         in.ArrivalTime,
 		ArrivalAirportId:    in.ArrivalAirportId,
 		Cost:                in.Cost,
-	}, nil
+	}
 }
