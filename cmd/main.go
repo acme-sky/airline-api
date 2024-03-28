@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/acme-sky/airline-api/internal/controllers"
+	"github.com/acme-sky/airline-api/internal/handlers"
 	"github.com/acme-sky/airline-api/pkg/config"
 	"github.com/acme-sky/airline-api/pkg/db"
 	"github.com/gin-gonic/gin"
@@ -31,8 +31,10 @@ func main() {
 	{
 		airports := v1.Group("/airports")
 		{
-			airports.GET("/", controllers.AirportGet)
-			airports.POST("/", controllers.AirportPost)
+			airports.GET("/", handlers.AirportHandlerGet)
+			airports.POST("/", handlers.AirportHandlerPost)
+			airports.GET("/:id/", handlers.AirportHandlerGetId)
+			airports.PUT("/:id/", handlers.AirportHandlerPut)
 		}
 	}
 
