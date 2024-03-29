@@ -60,6 +60,16 @@ func main() {
 			flights.PUT("/:id/", middleware.Auth(), handlers.FlightHandlerPut)
 			flights.POST("/filter/", handlers.FlightHandlerFilter)
 		}
+
+		hooks := v1.Group("/hooks")
+		{
+			hooks.Use(middleware.Auth())
+			hooks.GET("/", handlers.HookHandlerGet)
+			hooks.POST("/", handlers.HookHandlerPost)
+			hooks.GET("/:id/", handlers.HookHandlerGetId)
+			hooks.PUT("/:id/", handlers.HookHandlerPut)
+			hooks.POST("/offert/", handlers.HookHandlerOffert)
+		}
 	}
 
 	router.Run()
