@@ -84,3 +84,32 @@ func FlightHandlerPut(c *gin.Context) {
 
 	c.JSON(http.StatusOK, flight)
 }
+
+// Filter flights by departaure (airport and time) and arrival (airport and
+// time). This handler can be called by everyone.
+func FlightHandlerFilter(c *gin.Context) {
+	db, _ := db.GetDb()
+
+	var input models.FlightFilterInput
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := models.ValidateFlight(db, input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	var flights []models.Flight
+	if err := db.Where("departaure_airport_id = ? AND arrival_airport_id = ? AND departaure_time::date = to_date(?, 'YYYY-MM-DD') AND arrival_time::date = to_date(?, 'YYYY-MM-DD')",
+		input.DepartaureAirportId, input.ArrivalAirportId, input.DepartaureTime.Format("2006-01-02"), input.ArrivalTime.Format("2006-01-02")).Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flights).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"count": len(flights),
+		"data":  &flights,
+	})
+}

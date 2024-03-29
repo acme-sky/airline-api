@@ -54,11 +54,11 @@ func main() {
 
 		flights := v1.Group("/flights")
 		{
-			flights.Use(middleware.Auth())
-			flights.GET("/", handlers.FlightHandlerGet)
-			flights.POST("/", handlers.FlightHandlerPost)
-			flights.GET("/:id/", handlers.FlightHandlerGetId)
-			flights.PUT("/:id/", handlers.FlightHandlerPut)
+			flights.GET("/", middleware.Auth(), handlers.FlightHandlerGet)
+			flights.POST("/", middleware.Auth(), handlers.FlightHandlerPost)
+			flights.GET("/:id/", middleware.Auth(), handlers.FlightHandlerGetId)
+			flights.PUT("/:id/", middleware.Auth(), handlers.FlightHandlerPut)
+			flights.POST("/filter/", handlers.FlightHandlerFilter)
 		}
 	}
 
