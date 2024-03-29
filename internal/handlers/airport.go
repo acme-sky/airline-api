@@ -40,7 +40,7 @@ func AirportHandlerPost(c *gin.Context) {
 }
 
 // Handle GET request for a selected id.
-// Returns the aiport or a 404 status
+// Returns the airport or a 404 status
 func AirportHandlerGetId(c *gin.Context) {
 	db, _ := db.GetDb()
 	var airport models.Airport
