@@ -14,11 +14,6 @@ import (
 func main() {
 	router := gin.Default()
 
-	// Mode is setted as Debug by default. This line below keep this thing more
-	// expressive but it should be setted up by an environment variable.
-	// TODO: set mode by env var
-	gin.SetMode(gin.DebugMode)
-
 	var err error
 
 	// Read environment variables and stops execution if any errors occur
@@ -37,6 +32,11 @@ func main() {
 		log.Printf("failed to connect database. err %v", err)
 
 		return
+	}
+
+	// Env variable `debug` set up the mode below
+	if !config.Bool("debug") {
+		gin.SetMode(gin.ReleaseMode)
 	}
 
 	// v1 is just like a namespace for every routing here below
