@@ -68,7 +68,7 @@ func main() {
 			hooks.POST("/", handlers.HookHandlerPost)
 			hooks.GET("/:id/", handlers.HookHandlerGetId)
 			hooks.PUT("/:id/", handlers.HookHandlerPut)
-			hooks.POST("/offert/", handlers.HookHandlerOffert)
+			hooks.POST("/offer/", handlers.HookHandlerOffer)
 		}
 	}
 

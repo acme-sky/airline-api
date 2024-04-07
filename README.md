@@ -3,7 +3,7 @@
 This repo refers to the Airline service used by ACME Sky.
 
 It is a REST API backend used by ACME Sky to find new flights and receive new
-offerts.
+offers.
 
 ## Build
 

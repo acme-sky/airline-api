@@ -78,17 +78,17 @@ func HookHandlerPut(c *gin.Context) {
 	c.JSON(http.StatusOK, hook)
 }
 
-// Handle POST request to send an offert to all the saved hooks.
+// Handle POST request to send an offer to all the saved hooks.
 // First get all hooks, then validate the request payload which must be
 // `{"flight_id": <valid_id>}`
 // and finally send the flight object to all the hooks by their endpoint.
-func HookHandlerOffert(c *gin.Context) {
+func HookHandlerOffer(c *gin.Context) {
 	db, _ := db.GetDb()
 
 	var hooks []models.Hook
 	db.Find(&hooks)
 
-	var input models.OffertInput
+	var input models.OfferInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
@@ -136,7 +136,7 @@ func HookHandlerOffert(c *gin.Context) {
 		total += 1
 	}
 
-    // Send back some info just to know how many hook work or not
+	// Send back some info just to know how many hook work or not
 	c.JSON(http.StatusOK, gin.H{
 		"hooks":  len(hooks),
 		"sent":   total,

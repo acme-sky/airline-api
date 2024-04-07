@@ -19,7 +19,7 @@ type HookInput struct {
 }
 
 // Struct used to send a new request for a selected flight
-type OffertInput struct {
+type OfferInput struct {
 	FlightId int `json:"flight_id" binding:"required"`
 }
 
