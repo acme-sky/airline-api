@@ -10,6 +10,7 @@ import (
 // Flight model
 type Flight struct {
 	Id                  uint      `gorm:"column:id" json:"id"`
+	Code                string    `gorm:"code" json:"code"`
 	CreatedAt           time.Time `gorm:"column:created_at" json:"crated_at"`
 	DepartaureTime      time.Time `gorm:"column:departaure_time" json:"departaure_time"`
 	ArrivalTime         time.Time `gorm:"column:arrival_time" json:"arrival_time"`
@@ -28,6 +29,7 @@ type FlightValidationInput interface {
 
 // Struct used to get new data for a flight
 type FlightInput struct {
+	Code                string    `json:"code" binding:"required"`
 	DepartaureTime      time.Time `json:"departaure_time" binding:"required"`
 	ArrivalTime         time.Time `json:"arrival_time" binding:"required"`
 	DepartaureAirportId int       `json:"departaure_airport_id" binding:"required"`
@@ -89,6 +91,7 @@ func ValidateFlight(db *gorm.DB, in FlightValidationInput) error {
 func NewFlight(in FlightInput) Flight {
 	return Flight{
 		CreatedAt:           time.Now(),
+		Code:                in.Code,
 		DepartaureTime:      in.DepartaureTime,
 		DepartaureAirportId: in.DepartaureAirportId,
 		ArrivalTime:         in.ArrivalTime,
