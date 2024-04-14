@@ -41,7 +41,8 @@ func JourneyHandlerPost(c *gin.Context) {
 
 	journey := models.NewJourney(input)
 	db.Create(&journey)
-	db.Preload("DepartaureFlight").Preload("ArrivalFlight").Find(&journey)
+	db = models.JourneyPreload(db)
+	db.Find(&journey)
 
 	c.JSON(http.StatusCreated, journey)
 }
@@ -51,7 +52,9 @@ func JourneyHandlerPost(c *gin.Context) {
 func JourneyHandlerGetId(c *gin.Context) {
 	db, _ := db.GetDb()
 	var journey models.Journey
-	if err := db.Where("id = ?", c.Param("id")).Preload("DepartaureFlight").Preload("ArrivalFlight").First(&journey).Error; err != nil {
+	db = db.Where("id = ?", c.Param("id"))
+	db = models.JourneyPreload(db)
+	if err := db.First(&journey).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}
@@ -82,7 +85,8 @@ func JourneyHandlerPut(c *gin.Context) {
 	}
 
 	db.Model(&journey).Updates(input)
-	db.Preload("DepartaureFlight").Preload("ArrivalFlight").Find(&journey)
+	db = models.JourneyPreload(db)
+	db.Find(&journey)
 
 	c.JSON(http.StatusOK, journey)
 }
