@@ -70,6 +70,15 @@ func main() {
 			hooks.PUT("/:id/", handlers.HookHandlerPut)
 			hooks.POST("/offer/", handlers.HookHandlerOffer)
 		}
+
+		journeys := v1.Group("/journeys")
+		{
+			journeys.Use(middleware.Auth())
+			journeys.GET("/", handlers.JourneyHandlerGet)
+			journeys.POST("/", handlers.JourneyHandlerPost)
+			journeys.GET("/:id/", handlers.JourneyHandlerGetId)
+			journeys.PUT("/:id/", handlers.JourneyHandlerPut)
+		}
 	}
 
 	router.Run()
