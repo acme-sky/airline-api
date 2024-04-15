@@ -1,0 +1,235 @@
+openapi: 3.0.3
+info:
+  title: ACMEAirline API
+  description: |-
+    This is the description for the API used by ACMESky for airline management.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /v1/airports/:
+    get:
+      consumes:
+      - application/json
+      description: Get all airports
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get all airports
+      tags:
+      - Airports
+    post:
+      consumes:
+      - application/json
+      description: Create a new airport
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create a new airport
+      tags:
+      - Airports
+  /v1/airports/{airportId}/:
+    post:
+      consumes:
+      - application/json
+      description: Get an airport
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get an airport
+      tags:
+      - Airports
+    put:
+      consumes:
+      - application/json
+      description: Edit an airport
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Edit an airport
+      tags:
+      - Airports
+  /v1/flights/:
+    get:
+      consumes:
+      - application/json
+      description: Get all flights
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get all flights
+      tags:
+      - Flights
+  /v1/flights/{flightId}/:
+    get:
+      consumes:
+      - application/json
+      description: Get a flight
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get a flight
+      tags:
+      - Flights
+    post:
+      consumes:
+      - application/json
+      description: Filter flights
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Filter flights
+      tags:
+      - Flights
+    put:
+      consumes:
+      - application/json
+      description: Edit a flight
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Edit a flight
+      tags:
+      - Flights
+  /v1/flights/filter/:
+    post:
+      consumes:
+      - application/json
+      description: Create a new flight
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create a new flight
+      tags:
+      - Flights
+  /v1/hooks/:
+    get:
+      consumes:
+      - application/json
+      description: Get all hooks
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get all hooks
+      tags:
+      - Hooks
+    post:
+      consumes:
+      - application/json
+      description: Create a new hook
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create a new hook
+      tags:
+      - Hooks
+  /v1/hooks/{hookId}:
+    get:
+      consumes:
+      - application/json
+      description: Get a hook
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get a hook
+      tags:
+      - Hooks
+    put:
+      consumes:
+      - application/json
+      description: Edit a hook
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Edit a hook
+      tags:
+      - Hooks
+  /v1/hooks/offer/:
+    post:
+      consumes:
+      - application/json
+      description: Create a new offer for a hook
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create a new offer for a hook
+      tags:
+      - Hooks
+  /v1/journeys/:
+    get:
+      consumes:
+      - application/json
+      description: Get all journeys
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get all journeys
+      tags:
+      - Journeys
+    post:
+      consumes:
+      - application/json
+      description: Create a new journey
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+      summary: Create a new journey
+      tags:
+      - Journeys
+  /v1/journeys/{journeyId}/:
+    get:
+      consumes:
+      - application/json
+      description: Get a journey
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get a journey
+      tags:
+      - Journeys
+    put:
+      consumes:
+      - application/json
+      description: Edit a journey
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Edit a journey
+      tags:
+      - Journeys

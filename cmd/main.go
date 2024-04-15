@@ -8,6 +8,7 @@ import (
 	"github.com/acme-sky/airline-api/pkg/db"
 	"github.com/acme-sky/airline-api/pkg/middleware"
 	"github.com/gin-gonic/gin"
+	cors "github.com/rs/cors/wrapper/gin"
 )
 
 // Create a new instance of Gin server
@@ -38,6 +39,10 @@ func main() {
 	if !config.Bool("debug") {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
+	router.Use(cors.Default())
+
+	router.StaticFile("/swagger.yml", "cmd/swagger.yml")
 
 	// v1 is just like a namespace for every routing here below
 	v1 := router.Group("/v1")

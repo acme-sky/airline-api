@@ -10,6 +10,15 @@ import (
 
 // Handle GET request for `Flight` model.
 // It returns a list of flights.
+// GetFlights godoc
+//	@Summary	Get all flights
+//	@Schemes
+//	@Description	Get all flights
+//	@Tags			Flights
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/flights/ [get]
 func FlightHandlerGet(c *gin.Context) {
 	db, _ := db.GetDb()
 	var flights []models.Flight
@@ -24,6 +33,15 @@ func FlightHandlerGet(c *gin.Context) {
 // Handle POST request for `Flight` model.
 // Validate JSON input by the request and crate a new flight. Finally returns
 // the new created data (after preloading the foreign key objects).
+// PostFlights godoc
+//	@Summary	Create a new flight
+//	@Schemes
+//	@Description	Create a new flight
+//	@Tags			Flights
+//	@Accept			json
+//	@Produce		json
+//	@Success		201
+//	@Router			/v1/flights/filter/ [post]
 func FlightHandlerPost(c *gin.Context) {
 	db, _ := db.GetDb()
 	var input models.FlightInput
@@ -46,6 +64,15 @@ func FlightHandlerPost(c *gin.Context) {
 
 // Handle GET request for a selected id.
 // Returns the flight or a 404 status
+// GetFlightById godoc
+//	@Summary	Get a flight
+//	@Schemes
+//	@Description	Get a flight
+//	@Tags			Flights
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/flights/{flightId}/ [get]
 func FlightHandlerGetId(c *gin.Context) {
 	db, _ := db.GetDb()
 	var flight models.Flight
@@ -60,6 +87,15 @@ func FlightHandlerGetId(c *gin.Context) {
 // Handle PUT request for `Flight` model.
 // First checks if the selected flight exists or not. Then, validates JSON input by the
 // request and edit a selected flight. Finally returns the new created data.
+// EditFlightById godoc
+//	@Summary	Edit a flight
+//	@Schemes
+//	@Description	Edit a flight
+//	@Tags			Flights
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/flights/{flightId}/ [put]
 func FlightHandlerPut(c *gin.Context) {
 	db, _ := db.GetDb()
 	var flight models.Flight
@@ -87,6 +123,15 @@ func FlightHandlerPut(c *gin.Context) {
 
 // Filter flights by departaure (airport and time) and arrival (airport and
 // time). This handler can be called by everyone.
+// FilterFlights godoc
+//	@Summary	Filter flights
+//	@Schemes
+//	@Description	Filter flights
+//	@Tags			Flights
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/flights/{flightId}/ [post]
 func FlightHandlerFilter(c *gin.Context) {
 	db, _ := db.GetDb()
 

@@ -14,6 +14,15 @@ import (
 
 // Handle GET request for `Hook` model.
 // It returns a list of hooks.
+// GetHooks godoc
+//	@Summary	Get all hooks
+//	@Schemes
+//	@Description	Get all hooks
+//	@Tags			Hooks
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/hooks/ [get]
 func HookHandlerGet(c *gin.Context) {
 	db, _ := db.GetDb()
 
@@ -29,6 +38,15 @@ func HookHandlerGet(c *gin.Context) {
 // Handle POST request for `Hook` model.
 // Validate JSON input by the request and crate a new hook. Finally returns
 // the new created data.
+// PostHooks godoc
+//	@Summary	Create a new hook
+//	@Schemes
+//	@Description	Create a new hook
+//	@Tags			Hooks
+//	@Accept			json
+//	@Produce		json
+//	@Success		201
+//	@Router			/v1/hooks/ [post]
 func HookHandlerPost(c *gin.Context) {
 	db, _ := db.GetDb()
 	var input models.HookInput
@@ -45,6 +63,15 @@ func HookHandlerPost(c *gin.Context) {
 
 // Handle GET request for a selected id.
 // Returns the hook or a 404 status
+// GetHooksById godoc
+//	@Summary	Get a hook
+//	@Schemes
+//	@Description	Get a hook
+//	@Tags			Hooks
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/hooks/{hookId} [get]
 func HookHandlerGetId(c *gin.Context) {
 	db, _ := db.GetDb()
 	var hook models.Hook
@@ -59,6 +86,15 @@ func HookHandlerGetId(c *gin.Context) {
 // Handle PUT request for `Hook` model.
 // First checks if the selected hook exists or not. Then, validates JSON input by the
 // request and edit a selected hook. Finally returns the new created data.
+// EditHooksById godoc
+//	@Summary	Edit a hook
+//	@Schemes
+//	@Description	Edit a hook
+//	@Tags			Hooks
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/hooks/{hookId} [put]
 func HookHandlerPut(c *gin.Context) {
 	db, _ := db.GetDb()
 	var hook models.Hook
@@ -82,6 +118,15 @@ func HookHandlerPut(c *gin.Context) {
 // First get all hooks, then validate the request payload which must be
 // `{"flight_id": <valid_id>}`
 // and finally send the flight object to all the hooks by their endpoint.
+// OfferHooks godoc
+//	@Summary	Create a new offer for a hook
+//	@Schemes
+//	@Description	Create a new offer for a hook
+//	@Tags			Hooks
+//	@Accept			json
+//	@Produce		json
+//	@Success		201
+//	@Router			/v1/hooks/offer/ [post]
 func HookHandlerOffer(c *gin.Context) {
 	db, _ := db.GetDb()
 

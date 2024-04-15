@@ -10,6 +10,15 @@ import (
 
 // Handle GET request for `Airport` model.
 // It returns a list of airports.
+// GetAirports godoc
+//	@Summary	Get all airports
+//	@Schemes
+//	@Description	Get all airports
+//	@Tags			Airports
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/airports/ [get]
 func AirportHandlerGet(c *gin.Context) {
 	db, _ := db.GetDb()
 
@@ -25,6 +34,15 @@ func AirportHandlerGet(c *gin.Context) {
 // Handle POST request for `Airport` model.
 // Validate JSON input by the request and crate a new airport. Finally returns
 // the new created data.
+// PostAirports godoc
+//	@Summary	Create a new airport
+//	@Schemes
+//	@Description	Create a new airport
+//	@Tags			Airports
+//	@Accept			json
+//	@Produce		json
+//	@Success		201
+//	@Router			/v1/airports/ [post]
 func AirportHandlerPost(c *gin.Context) {
 	db, _ := db.GetDb()
 	var input models.AirportInput
@@ -41,6 +59,15 @@ func AirportHandlerPost(c *gin.Context) {
 
 // Handle GET request for a selected id.
 // Returns the airport or a 404 status
+// GetAirportById godoc
+//	@Summary	Get an airport
+//	@Schemes
+//	@Description	Get an airport
+//	@Tags			Airports
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/airports/{airportId}/ [post]
 func AirportHandlerGetId(c *gin.Context) {
 	db, _ := db.GetDb()
 	var airport models.Airport
@@ -55,6 +82,15 @@ func AirportHandlerGetId(c *gin.Context) {
 // Handle PUT request for `Airport` model.
 // First checks if the selected airport exists or not. Then, validates JSON input by the
 // request and edit a selected airport. Finally returns the new created data.
+// EditAirportById godoc
+//	@Summary	Edit an airport
+//	@Schemes
+//	@Description	Edit an airport
+//	@Tags			Airports
+//	@Accept			json
+//	@Produce		json
+//	@Success		200
+//	@Router			/v1/airports/{airportId}/ [put]
 func AirportHandlerPut(c *gin.Context) {
 	db, _ := db.GetDb()
 	var airport models.Airport
