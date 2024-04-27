@@ -11,6 +11,7 @@ import (
 // Handle GET request for `Flight` model.
 // It returns a list of flights.
 // GetFlights godoc
+//
 //	@Summary	Get all flights
 //	@Schemes
 //	@Description	Get all flights
@@ -34,6 +35,7 @@ func FlightHandlerGet(c *gin.Context) {
 // Validate JSON input by the request and crate a new flight. Finally returns
 // the new created data (after preloading the foreign key objects).
 // PostFlights godoc
+//
 //	@Summary	Create a new flight
 //	@Schemes
 //	@Description	Create a new flight
@@ -65,6 +67,7 @@ func FlightHandlerPost(c *gin.Context) {
 // Handle GET request for a selected id.
 // Returns the flight or a 404 status
 // GetFlightById godoc
+//
 //	@Summary	Get a flight
 //	@Schemes
 //	@Description	Get a flight
@@ -88,6 +91,7 @@ func FlightHandlerGetId(c *gin.Context) {
 // First checks if the selected flight exists or not. Then, validates JSON input by the
 // request and edit a selected flight. Finally returns the new created data.
 // EditFlightById godoc
+//
 //	@Summary	Edit a flight
 //	@Schemes
 //	@Description	Edit a flight
@@ -124,6 +128,7 @@ func FlightHandlerPut(c *gin.Context) {
 // Filter flights by departaure (airport and time) and arrival (airport and
 // time). This handler can be called by everyone.
 // FilterFlights godoc
+//
 //	@Summary	Filter flights
 //	@Schemes
 //	@Description	Filter flights
@@ -141,14 +146,15 @@ func FlightHandlerFilter(c *gin.Context) {
 		return
 	}
 
-	if err := models.ValidateFlight(db, input); err != nil {
+	airports, err := models.ValidateFlightFilter(db, input)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
 	var flights []models.Flight
 	if err := db.Where("departaure_airport_id = ? AND arrival_airport_id = ? AND departaure_time::date = to_date(?, 'YYYY-MM-DD') AND arrival_time::date = to_date(?, 'YYYY-MM-DD')",
-		input.DepartaureAirportId, input.ArrivalAirportId, input.DepartaureTime.Format("2006-01-02"), input.ArrivalTime.Format("2006-01-02")).Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flights).Error; err != nil {
+		airports[0], airports[1], input.DepartaureTime.Format("2006-01-02"), input.ArrivalTime.Format("2006-01-02")).Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flights).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}
