@@ -153,8 +153,14 @@ func FlightHandlerFilter(c *gin.Context) {
 	}
 
 	var flights []models.Flight
-	if err := db.Where("departaure_airport_id = ? AND arrival_airport_id = ? AND departaure_time::date = to_date(?, 'YYYY-MM-DD') AND arrival_time::date = to_date(?, 'YYYY-MM-DD')",
-		airports[0], airports[1], input.DepartaureTime.Format("2006-01-02"), input.ArrivalTime.Format("2006-01-02")).Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flights).Error; err != nil {
+	whereCondition := db.Where("departaure_airport_id = ? AND arrival_airport_id = ? AND departaure_time::date = to_date(?, 'YYYY-MM-DD') AND arrival_time::date = to_date(?, 'YYYY-MM-DD')",
+		airports[0], airports[1], input.DepartaureTime.Format("2006-01-02"), input.ArrivalTime.Format("2006-01-02"))
+
+	if input.Code != nil {
+		whereCondition = whereCondition.Where("code = ?", input.Code)
+	}
+
+	if err := whereCondition.Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flights).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}

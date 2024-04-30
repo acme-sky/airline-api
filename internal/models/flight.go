@@ -41,6 +41,7 @@ func (in FlightInput) Arrival() (time.Time, int) {
 
 // Struct used to get info on filter. Filter fliths by airport code
 type FlightFilterInput struct {
+	Code              *string   `json:"code"`
 	DepartaureTime    time.Time `json:"departaure_time" binding:"required"`
 	ArrivalTime       time.Time `json:"arrival_time" binding:"required"`
 	DepartaureAirport string    `json:"departaure_airport" binding:"required"`
