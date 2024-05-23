@@ -11,6 +11,7 @@ import (
 // Handle GET request for `Journey` model.
 // It returns a list of journeys.
 // GetJourney godoc
+//
 //	@Summary	Get all journeys
 //	@Schemes
 //	@Description	Get all journeys
@@ -36,6 +37,7 @@ func JourneyHandlerGet(c *gin.Context) {
 // Validate JSON input by the request and crate a new journey. Finally returns
 // the new created data (after preloading the foreign key objects).
 // PostJourney godoc
+//
 //	@Summary	Create a new journey
 //	@Schemes
 //	@Description	Create a new journey
@@ -68,6 +70,7 @@ func JourneyHandlerPost(c *gin.Context) {
 // Handle GET request for a selected id.
 // Returns the journey or a 404 status
 // GetJourneyById godoc
+//
 //	@Summary	Get a journey
 //	@Schemes
 //	@Description	Get a journey
@@ -93,6 +96,7 @@ func JourneyHandlerGetId(c *gin.Context) {
 // First checks if the selected journey exists or not. Then, validates JSON input by the
 // request and edit a selected journey. Finally returns the new created data.
 // EditJourneyById godoc
+//
 //	@Summary	Edit a journey
 //	@Schemes
 //	@Description	Edit a journey

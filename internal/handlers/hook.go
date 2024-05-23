@@ -15,6 +15,7 @@ import (
 // Handle GET request for `Hook` model.
 // It returns a list of hooks.
 // GetHooks godoc
+//
 //	@Summary	Get all hooks
 //	@Schemes
 //	@Description	Get all hooks
@@ -39,6 +40,7 @@ func HookHandlerGet(c *gin.Context) {
 // Validate JSON input by the request and crate a new hook. Finally returns
 // the new created data.
 // PostHooks godoc
+//
 //	@Summary	Create a new hook
 //	@Schemes
 //	@Description	Create a new hook
@@ -64,6 +66,7 @@ func HookHandlerPost(c *gin.Context) {
 // Handle GET request for a selected id.
 // Returns the hook or a 404 status
 // GetHooksById godoc
+//
 //	@Summary	Get a hook
 //	@Schemes
 //	@Description	Get a hook
@@ -87,6 +90,7 @@ func HookHandlerGetId(c *gin.Context) {
 // First checks if the selected hook exists or not. Then, validates JSON input by the
 // request and edit a selected hook. Finally returns the new created data.
 // EditHooksById godoc
+//
 //	@Summary	Edit a hook
 //	@Schemes
 //	@Description	Edit a hook
@@ -119,6 +123,7 @@ func HookHandlerPut(c *gin.Context) {
 // `{"flight_id": <valid_id>}`
 // and finally send the flight object to all the hooks by their endpoint.
 // OfferHooks godoc
+//
 //	@Summary	Create a new offer for a hook
 //	@Schemes
 //	@Description	Create a new offer for a hook
@@ -140,7 +145,7 @@ func HookHandlerOffer(c *gin.Context) {
 	}
 
 	var flight models.Flight
-	if err := db.Where("id = ?", input.FlightId).Preload("DepartaureAirport").Preload("ArrivalAirport").First(&flight).Error; err != nil {
+	if err := db.Where("id = ?", input.FlightId).Preload("DepartureAirport").Preload("ArrivalAirport").First(&flight).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}

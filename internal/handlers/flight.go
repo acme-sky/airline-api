@@ -23,7 +23,7 @@ import (
 func FlightHandlerGet(c *gin.Context) {
 	db, _ := db.GetDb()
 	var flights []models.Flight
-	db.Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flights)
+	db.Preload("DepartureAirport").Preload("ArrivalAirport").Find(&flights)
 
 	c.JSON(http.StatusOK, gin.H{
 		"count": len(flights),
@@ -59,7 +59,7 @@ func FlightHandlerPost(c *gin.Context) {
 
 	flight := models.NewFlight(input)
 	db.Create(&flight)
-	db.Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flight)
+	db.Preload("DepartureAirport").Preload("ArrivalAirport").Find(&flight)
 
 	c.JSON(http.StatusCreated, flight)
 }
@@ -79,7 +79,7 @@ func FlightHandlerPost(c *gin.Context) {
 func FlightHandlerGetId(c *gin.Context) {
 	db, _ := db.GetDb()
 	var flight models.Flight
-	if err := db.Where("id = ?", c.Param("id")).Preload("DepartaureAirport").Preload("ArrivalAirport").First(&flight).Error; err != nil {
+	if err := db.Where("id = ?", c.Param("id")).Preload("DepartureAirport").Preload("ArrivalAirport").First(&flight).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}
@@ -120,12 +120,12 @@ func FlightHandlerPut(c *gin.Context) {
 	}
 
 	db.Model(&flight).Updates(input)
-	db.Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flight)
+	db.Preload("DepartureAirport").Preload("ArrivalAirport").Find(&flight)
 
 	c.JSON(http.StatusOK, flight)
 }
 
-// Filter flights by departaure (airport and time) and arrival (airport and
+// Filter flights by departure (airport and time) and arrival (airport and
 // time). This handler can be called by everyone.
 // FilterFlights godoc
 //
@@ -153,14 +153,14 @@ func FlightHandlerFilter(c *gin.Context) {
 	}
 
 	var flights []models.Flight
-	whereCondition := db.Where("departaure_airport_id = ? AND arrival_airport_id = ? AND departaure_time::date = to_date(?, 'YYYY-MM-DD') AND arrival_time::date = to_date(?, 'YYYY-MM-DD')",
-		airports[0], airports[1], input.DepartaureTime.Format("2006-01-02"), input.ArrivalTime.Format("2006-01-02"))
+	whereCondition := db.Where("departure_airport_id = ? AND arrival_airport_id = ? AND departure_time::date = to_date(?, 'YYYY-MM-DD') AND arrival_time::date = to_date(?, 'YYYY-MM-DD')",
+		airports[0], airports[1], input.DepartureTime.Format("2006-01-02"), input.ArrivalTime.Format("2006-01-02"))
 
 	if input.Code != nil {
 		whereCondition = whereCondition.Where("code = ?", input.Code)
 	}
 
-	if err := whereCondition.Preload("DepartaureAirport").Preload("ArrivalAirport").Find(&flights).Error; err != nil {
+	if err := whereCondition.Preload("DepartureAirport").Preload("ArrivalAirport").Find(&flights).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
 		return
 	}

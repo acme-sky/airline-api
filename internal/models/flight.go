@@ -9,30 +9,30 @@ import (
 
 // Flight model
 type Flight struct {
-	Id                  uint      `gorm:"column:id" json:"id"`
-	Code                string    `gorm:"code" json:"code"`
-	CreatedAt           time.Time `gorm:"column:created_at" json:"crated_at"`
-	DepartaureTime      time.Time `gorm:"column:departaure_time" json:"departaure_time"`
-	ArrivalTime         time.Time `gorm:"column:arrival_time" json:"arrival_time"`
-	DepartaureAirportId int       `json:"-"`
-	DepartaureAirport   Airport   `gorm:"foreignKey:DepartaureAirportId" json:"departaure_airport"`
-	ArrivalAirportId    int       `json:"-"`
-	ArrivalAirport      Airport   `gorm:"foreignKey:ArrivalAirportId" json:"arrival_airport"`
-	Cost                float32   `gorm:"column:cost" json:"cost"`
+	Id                 uint      `gorm:"column:id" json:"id"`
+	Code               string    `gorm:"code" json:"code"`
+	CreatedAt          time.Time `gorm:"column:created_at" json:"crated_at"`
+	DepartureTime      time.Time `gorm:"column:departure_time" json:"departure_time"`
+	ArrivalTime        time.Time `gorm:"column:arrival_time" json:"arrival_time"`
+	DepartureAirportId int       `json:"-"`
+	DepartureAirport   Airport   `gorm:"foreignKey:DepartureAirportId" json:"departure_airport"`
+	ArrivalAirportId   int       `json:"-"`
+	ArrivalAirport     Airport   `gorm:"foreignKey:ArrivalAirportId" json:"arrival_airport"`
+	Cost               float32   `gorm:"column:cost" json:"cost"`
 }
 
 // Struct used to get new data for a flight
 type FlightInput struct {
-	Code                string    `json:"code" binding:"required"`
-	DepartaureTime      time.Time `json:"departaure_time" binding:"required"`
-	ArrivalTime         time.Time `json:"arrival_time" binding:"required"`
-	DepartaureAirportId int       `json:"departaure_airport_id" binding:"required"`
-	ArrivalAirportId    int       `json:"arrival_airport_id" binding:"required"`
-	Cost                float32   `json:"cost" binding:"required"`
+	Code               string    `json:"code" binding:"required"`
+	DepartureTime      time.Time `json:"departure_time" binding:"required"`
+	ArrivalTime        time.Time `json:"arrival_time" binding:"required"`
+	DepartureAirportId int       `json:"departure_airport_id" binding:"required"`
+	ArrivalAirportId   int       `json:"arrival_airport_id" binding:"required"`
+	Cost               float32   `json:"cost" binding:"required"`
 }
 
-func (in FlightInput) Departaure() (time.Time, int) {
-	return in.DepartaureTime, in.DepartaureAirportId
+func (in FlightInput) Departure() (time.Time, int) {
+	return in.DepartureTime, in.DepartureAirportId
 }
 
 func (in FlightInput) Arrival() (time.Time, int) {
@@ -41,15 +41,15 @@ func (in FlightInput) Arrival() (time.Time, int) {
 
 // Struct used to get info on filter. Filter fliths by airport code
 type FlightFilterInput struct {
-	Code              *string   `json:"code"`
-	DepartaureTime    time.Time `json:"departaure_time" binding:"required"`
-	ArrivalTime       time.Time `json:"arrival_time" binding:"required"`
-	DepartaureAirport string    `json:"departaure_airport" binding:"required"`
-	ArrivalAirport    string    `json:"arrival_airport" binding:"required"`
+	Code             *string   `json:"code"`
+	DepartureTime    time.Time `json:"departure_time" binding:"required"`
+	ArrivalTime      time.Time `json:"arrival_time" binding:"required"`
+	DepartureAirport string    `json:"departure_airport" binding:"required"`
+	ArrivalAirport   string    `json:"arrival_airport" binding:"required"`
 }
 
-func (in FlightFilterInput) Departaure() (time.Time, string) {
-	return in.DepartaureTime, in.DepartaureAirport
+func (in FlightFilterInput) Departure() (time.Time, string) {
+	return in.DepartureTime, in.DepartureAirport
 }
 
 func (in FlightFilterInput) Arrival() (time.Time, string) {
@@ -58,11 +58,11 @@ func (in FlightFilterInput) Arrival() (time.Time, string) {
 
 // It validates data from `in` and returns a possible error or not
 func ValidateFlight(db *gorm.DB, in FlightInput) error {
-	var departaure_airport Airport
-	departaure_time, departaure_airport_id := in.Departaure()
+	var departure_airport Airport
+	departure_time, departure_airport_id := in.Departure()
 	arrival_time, arrival_airport_id := in.Arrival()
-	if err := db.Where("id = ?", departaure_airport_id).First(&departaure_airport).Error; err != nil {
-		return errors.New("`departaure_airport_id` does not exist.")
+	if err := db.Where("id = ?", departure_airport_id).First(&departure_airport).Error; err != nil {
+		return errors.New("`departure_airport_id` does not exist.")
 	}
 
 	var arrival_airport Airport
@@ -70,26 +70,26 @@ func ValidateFlight(db *gorm.DB, in FlightInput) error {
 		return errors.New("`arrival_airport_id` does not exist.")
 	}
 
-	if departaure_airport_id == arrival_airport_id {
-		return errors.New("`departaure_airport_id` can't be equals to `arrival_airport_id`")
+	if departure_airport_id == arrival_airport_id {
+		return errors.New("`departure_airport_id` can't be equals to `arrival_airport_id`")
 	}
 
-	if departaure_time.Equal(arrival_time) || departaure_time.After(arrival_time) {
-		return errors.New("`departaure_time` can't be after or the same `arrival_time`")
+	if departure_time.Equal(arrival_time) || departure_time.After(arrival_time) {
+		return errors.New("`departure_time` can't be after or the same `arrival_time`")
 	}
 
 	return nil
 }
 
 // It validates data from `in` and returns a possible error or not. If there's
-// no error, returns an array of airport ids: first one for departaure airport
+// no error, returns an array of airport ids: first one for departure airport
 // and the latter for the arrival airport.
 func ValidateFlightFilter(db *gorm.DB, in FlightFilterInput) (*[2]uint, error) {
-	var departaure_airport Airport
-	departaure_time, departaure_airport_code := in.Departaure()
+	var departure_airport Airport
+	departure_time, departure_airport_code := in.Departure()
 	arrival_time, arrival_airport_code := in.Arrival()
-	if err := db.Where("code = ?", departaure_airport_code).First(&departaure_airport).Error; err != nil {
-		return nil, errors.New("`departaure_airport_id` does not exist.")
+	if err := db.Where("code = ?", departure_airport_code).First(&departure_airport).Error; err != nil {
+		return nil, errors.New("`departure_airport_id` does not exist.")
 	}
 
 	var arrival_airport Airport
@@ -97,15 +97,15 @@ func ValidateFlightFilter(db *gorm.DB, in FlightFilterInput) (*[2]uint, error) {
 		return nil, errors.New("`arrival_airport_id` does not exist.")
 	}
 
-	if departaure_airport.Id == arrival_airport.Id {
-		return nil, errors.New("`departaure_airport_id` can't be equals to `arrival_airport_id`")
+	if departure_airport.Id == arrival_airport.Id {
+		return nil, errors.New("`departure_airport_id` can't be equals to `arrival_airport_id`")
 	}
 
-	if departaure_time.Equal(arrival_time) || departaure_time.After(arrival_time) {
-		return nil, errors.New("`departaure_time` can't be after or the same `arrival_time`")
+	if departure_time.Equal(arrival_time) || departure_time.After(arrival_time) {
+		return nil, errors.New("`departure_time` can't be after or the same `arrival_time`")
 	}
 
-	airports := [2]uint{departaure_airport.Id, arrival_airport.Id}
+	airports := [2]uint{departure_airport.Id, arrival_airport.Id}
 
 	return &airports, nil
 }
@@ -114,12 +114,12 @@ func ValidateFlightFilter(db *gorm.DB, in FlightFilterInput) (*[2]uint, error) {
 // `ValidateFlight(..., in)` method
 func NewFlight(in FlightInput) Flight {
 	return Flight{
-		CreatedAt:           time.Now(),
-		Code:                in.Code,
-		DepartaureTime:      in.DepartaureTime,
-		DepartaureAirportId: in.DepartaureAirportId,
-		ArrivalTime:         in.ArrivalTime,
-		ArrivalAirportId:    in.ArrivalAirportId,
-		Cost:                in.Cost,
+		CreatedAt:          time.Now(),
+		Code:               in.Code,
+		DepartureTime:      in.DepartureTime,
+		DepartureAirportId: in.DepartureAirportId,
+		ArrivalTime:        in.ArrivalTime,
+		ArrivalAirportId:   in.ArrivalAirportId,
+		Cost:               in.Cost,
 	}
 }
