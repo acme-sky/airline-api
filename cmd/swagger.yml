@@ -32,8 +32,21 @@ paths:
       summary: Create a new airport
       tags:
       - Airports
+  /v1/airports/{airportCode}/:
+    get:
+      consumes:
+      - application/json
+      description: Get an airport
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get an airport
+      tags:
+      - Airports
   /v1/airports/{airportId}/:
-    post:
+    get:
       consumes:
       - application/json
       description: Get an airport
