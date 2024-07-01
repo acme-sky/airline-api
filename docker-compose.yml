@@ -16,6 +16,9 @@ services:
   airlineservice-api:
     image: acmesky-airlineservice-api
     container_name: airlineservice-api
+    networks:
+      - default
+      - acmesky
     environment:
       - DATABASE_DSN=${DATABASE_DSN}
       - JWT_TOKEN=${JWT_TOKEN}
@@ -27,3 +30,7 @@ services:
 
 volumes:
   postgres-data:
+
+networks:
+  acmesky:
+    external: true
