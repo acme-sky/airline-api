@@ -86,8 +86,8 @@ func ValidateFlight(db *gorm.DB, in FlightInput) error {
 // and the latter for the arrival airport.
 func ValidateFlightFilter(db *gorm.DB, in FlightFilterInput) (*[2]uint, error) {
 	var departure_airport Airport
-	departure_time, departure_airport_code := in.Departure()
-	arrival_time, arrival_airport_code := in.Arrival()
+	_, departure_airport_code := in.Departure()
+	_, arrival_airport_code := in.Arrival()
 	if err := db.Where("code = ?", departure_airport_code).First(&departure_airport).Error; err != nil {
 		return nil, errors.New("`departure_airport_id` does not exist.")
 	}
@@ -99,10 +99,6 @@ func ValidateFlightFilter(db *gorm.DB, in FlightFilterInput) (*[2]uint, error) {
 
 	if departure_airport.Id == arrival_airport.Id {
 		return nil, errors.New("`departure_airport_id` can't be equals to `arrival_airport_id`")
-	}
-
-	if departure_time.Equal(arrival_time) || departure_time.After(arrival_time) {
-		return nil, errors.New("`departure_time` can't be after or the same `arrival_time`")
 	}
 
 	airports := [2]uint{departure_airport.Id, arrival_airport.Id}
