@@ -1,11 +1,5 @@
-openapi: 3.0.3
 info:
-  title: ACMEAirline API
-  description: |-
-    This is the description for the API used by ACMESky for airline management.
-  version: 1.0.0
-servers:
-  - url: http://localhost:8080
+  contact: {}
 paths:
   /v1/airports/:
     get:
@@ -246,3 +240,4 @@ paths:
       summary: Edit a journey
       tags:
       - Journeys
+swagger: "2.0"

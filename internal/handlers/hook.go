@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/acme-sky/airline-api/internal/models"
+	"github.com/acme-sky/airline-api/pkg/config"
 	"github.com/acme-sky/airline-api/pkg/db"
 	"github.com/gin-gonic/gin"
 )
@@ -152,11 +153,22 @@ func HookHandlerOffer(c *gin.Context) {
 
 	total := 0
 
-	payload, err := json.Marshal(flight)
+	conf, _ := config.GetConfig()
+	payload, err := json.Marshal(map[string]interface{}{
+		"departure_airport": flight.DepartureAirport.Code,
+		"departure_time":    flight.DepartureTime.Format("2006-01-02T15:04:05Z07:00"),
+		"arrival_airport":   flight.ArrivalAirport.Code,
+		"arrival_time":      flight.ArrivalTime.Format("2006-01-02T15:04:05Z07:00"),
+		"cost":              flight.Cost,
+		"code":              flight.Code,
+		"airline":           conf.String("airline.name"),
+	})
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
+
 	reader := bytes.NewReader(payload)
 
 	for _, hook := range hooks {

@@ -22,6 +22,7 @@ services:
     environment:
       - DATABASE_DSN=${DATABASE_DSN}
       - JWT_TOKEN=${JWT_TOKEN}
+      - AIRLINE_NAME=${AIRLINE_NAME}
     depends_on:
       - postgres
     ports:

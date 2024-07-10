@@ -18,6 +18,7 @@ POSTGRES_PASSWORD=pass
 POSTGRES_DB=db
 DATABASE_DSN="host=localhost user=user password=pass dbname=db port=5432"
 JWT_TOKEN=t0k3n
+AIRLINE_NAME=
 DEBUG=0
 ```
 

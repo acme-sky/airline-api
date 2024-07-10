@@ -22,6 +22,7 @@ EXPOSE 8080
 
 ENV DATABASE_DSN="host=localhost user=user password=password dbname=airline port=5432"
 ENV JWT_TOKEN="m1__sup3rs3cr3t!!"
+ENV AIRLINE_NAME=""
 ENV DEBUG=0
 
 CMD ["./main"]
