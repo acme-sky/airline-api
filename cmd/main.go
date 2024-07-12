@@ -40,7 +40,7 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	router.Use(cors.Default())
+	router.Use(cors.AllowAll())
 
 	router.StaticFile("/swagger.yml", "cmd/swagger.yml")
 
